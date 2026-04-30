@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unnati for Placecomm | XLRI GM 2026-27</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #FAF6F0;
+      --deep: #1A1209;
+      --gold: #C8932A;
+      --gold-light: #E8B84B;
+      --warm: #7C4A1E;
+      --accent: #D4572A;
+      --muted: #8A7560;
+      --card-bg: #FFFFFF;
+      --border: rgba(200,147,42,0.25);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--cream);
+      color: var(--deep);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* VISIT BANNER */
+    #visit-banner {
+      background: var(--deep);
+      color: var(--gold-light);
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    #visit-banner .dot { width: 7px; height: 7px; background: var(--gold); border-radius: 50%; display: inline-block; animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 60% 50%, rgba(200,147,42,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 60px 80px 80px;
+      position: relative;
+    }
+    .hero-left::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 15%; bottom: 15%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(200,147,42,0.12);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+      width: fit-content;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(52px, 6vw, 82px);
+      font-weight: 900;
+      line-height: 1.0;
+      margin-bottom: 12px;
+      color: var(--deep);
+    }
+    h1 span { color: var(--gold); font-style: italic; }
+
+    .tagline {
+      font-size: 17px;
+      color: var(--muted);
+      font-weight: 400;
+      margin-bottom: 36px;
+      line-height: 1.6;
+      max-width: 420px;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 28px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .hero-meta-item { display: flex; flex-direction: column; gap: 2px; }
+    .hero-meta-item .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); font-weight: 600; }
+    .hero-meta-item .value { font-size: 14px; font-weight: 600; color: var(--deep); }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--warm); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,147,42,0.3); }
+    .btn-outline {
+      background: transparent;
+      color: var(--deep);
+      border: 1.5px solid var(--deep);
+      padding: 14px 32px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-outline:hover { background: var(--deep); color: var(--cream); transform: translateY(-2px); }
+
+    .hero-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 80px 60px 60px;
+      position: relative;
+    }
+
+    .photo-frame {
+      position: relative;
+      width: 360px;
+    }
+    .photo-frame::before {
+      content: '';
+      position: absolute;
+      top: -16px; right: -16px;
+      width: 100%; height: 100%;
+      border: 2px solid var(--gold);
+      border-radius: 4px;
+      z-index: 0;
+    }
+    .photo-frame img {
+      width: 100%;
+      height: 460px;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 4px;
+      position: relative;
+      z-index: 1;
+      display: block;
+      filter: grayscale(8%);
+    }
+    .photo-label {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 8px 28px;
+      z-index: 2;
+      white-space: nowrap;
+    }
+
+    /* SECTIONS */
+    section { padding: 100px 80px; }
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(34px, 4vw, 52px);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .lead { font-size: 16px; line-height: 1.8; color: var(--muted); max-width: 640px; margin-bottom: 48px; }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about-text p { font-size: 16px; line-height: 1.85; color: #3A3020; margin-bottom: 20px; }
+    .about-text .highlight { color: var(--gold); font-weight: 600; }
+    .quote-block {
+      border-left: 3px solid var(--gold);
+      padding: 24px 32px;
+      background: rgba(200,147,42,0.05);
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--warm);
+      line-height: 1.6;
+      margin-top: 32px;
+    }
+
+    /* ACHIEVEMENTS */
+    .achievements-bg { background: var(--deep); }
+    .achievements-bg .section-label { color: var(--gold); }
+    .achievements-bg h2 { color: var(--cream); }
+    .achievements-bg .lead { color: rgba(250,246,240,0.5); }
+    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(200,147,42,0.2);
+      border-radius: 6px;
+      padding: 32px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .card:hover { transform: translateY(-6px); background: rgba(255,255,255,0.07); border-color: var(--gold); }
+    .card:hover::before { opacity: 1; }
+    .card-icon { font-size: 28px; margin-bottom: 16px; }
+    .card h3 { color: var(--gold-light); font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 10px; font-weight: 700; }
+    .card p { color: rgba(250,246,240,0.65); font-size: 14px; line-height: 1.7; }
+
+    /* PROMISES */
+    .promises-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .promise-item { position: relative; padding-left: 28px; }
+    .promise-item::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
+    .promise-item h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--deep); }
+    .promise-item p { font-size: 14px; line-height: 1.7; color: var(--muted); }
+
+    /* WHY DIFFERENT */
+    .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+    .diff-list { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+    .diff-list li { display: flex; gap: 16px; align-items: flex-start; }
+    .diff-list li .num { flex-shrink: 0; width: 32px; height: 32px; background: var(--gold); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+    .diff-list li .content h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .diff-list li .content p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+    /* VOTE */
+    .vote-section { background: linear-gradient(135deg, #1A1209 0%, #2D1F0A 100%); text-align: center; }
+    .vote-section h2 { color: var(--cream); }
+    .vote-section .lead { color: rgba(250,246,240,0.55); margin: 0 auto 48px; }
+    .vote-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(200,147,42,0.3);
+      border-radius: 12px;
+      padding: 52px;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+    .vote-question { color: var(--cream); font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 36px; font-weight: 700; }
+    .vote-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .vote-btn {
+      padding: 16px 48px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.25s;
+      border: 2px solid transparent;
+      letter-spacing: 0.06em;
+    }
+    .vote-yes { background: var(--gold); color: white; }
+    .vote-yes:hover { background: var(--gold-light); transform: scale(1.05); box-shadow: 0 12px 32px rgba(200,147,42,0.4); }
+    .vote-no { background: transparent; color: rgba(250,246,240,0.7); border-color: rgba(250,246,240,0.25); }
+    .vote-no:hover { background: rgba(255,255,255,0.1); border-color: rgba(250,246,240,0.5); transform: scale(1.03); }
+    .vote-result {
+      margin-top: 36px;
+      display: none;
+    }
+    .vote-result.show { display: block; }
+    .vote-result p { color: var(--gold-light); font-size: 17px; font-weight: 600; margin-bottom: 20px; }
+    .vote-bars { display: flex; flex-direction: column; gap: 12px; }
+    .bar-row { display: flex; align-items: center; gap: 12px; }
+    .bar-row .bar-label { color: rgba(250,246,240,0.7); font-size: 13px; width: 28px; }
+    .bar-outer { flex: 1; background: rgba(255,255,255,0.08); border-radius: 4px; height: 10px; overflow: hidden; }
+    .bar-inner { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+    .bar-yes-fill { background: var(--gold); }
+    .bar-no-fill { background: rgba(250,246,240,0.3); }
+    .bar-row .bar-count { color: rgba(250,246,240,0.6); font-size: 12px; width: 28px; text-align: right; }
+    .already-voted { color: rgba(200,147,42,0.7); font-size: 13px; margin-top: 14px; }
+
+    /* FOOTER */
+    footer {
+      background: var(--deep);
+      padding: 40px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(200,147,42,0.15);
+    }
+    footer .name { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--gold); font-weight: 700; }
+    footer .sub { font-size: 12px; color: rgba(250,246,240,0.4); margin-top: 4px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 80px 32px 40px; }
+      .hero-left::after { display: none; }
+      .hero-right { padding: 20px 32px 80px; }
+      .photo-frame { width: 260px; }
+      section { padding: 72px 32px; }
+      .about-grid, .diff-grid { grid-template-columns: 1fr; gap: 40px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .promises-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px; }
+      #visit-banner { font-size: 12px; flex-wrap: wrap; gap: 8px; }
+    }
+
+    /* ANIMATIONS */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<!-- VISIT BANNER -->
+<div id="visit-banner">
+  <span class="dot"></span>
+  <span id="visit-text">Loading visits...</span>
+  <span class="dot"></span>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left fade-in">
+    <div class="badge">✦ Placecomm Candidate · XLRI GM 2026–27</div>
+    <h1>Vote for<br/><span>Unnati.</span></h1>
+    <p class="tagline">A hustler who doesn't wait for things to happen — she makes sure they do.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span class="label">Batch</span><span class="value">GM 2026–27</span></div>
+      <div class="hero-meta-item"><span class="label">Role</span><span class="value">Placecomm</span></div>
+      <div class="hero-meta-item"><span class="label">Focus</span><span class="value">Product Management</span></div>
+    </div>
+    <div class="hero-cta">
+      <a href="#vote" class="btn-primary">Cast Your Vote →</a>
+      <a href="#about" class="btn-outline">Know More</a>
+    </div>
+  </div>
+  <div class="hero-right fade-in" style="transition-delay:0.15s">
+    <div class="photo-frame">
+      <img src="data:image/jpeg;base64,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" alt="Unnati"/>
+      <div class="photo-label">Unnati</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="background:#fff;">
+  <div class="section-label">01 · About</div>
+  <div class="about-grid">
+    <div class="about-text fade-in">
+      <h2>More than coordination — it's ownership.</h2>
+      <p>I'm Unnati. If there's one thing people who've worked with me will tell you, it's this — I'm a <span class="highlight">hustler</span>. I don't wait for things to happen. I make sure they do.</p>
+      <p>I've worked in high-pressure environments consistently — at <span class="highlight">Ather Energy</span> and during college as part of the <span class="highlight">Formula Student Team</span>. In both places, deadlines were tight, expectations were high, and there was no room for excuses.</p>
+      <p>What got results wasn't just skill — it was dedication. When things get tough, dedication is what ensures follow-ups happen, opportunities are pushed for, and nothing falls through the cracks.</p>
+      <div class="quote-block">"I won't promise perfection — but I will promise this: I will stay dedicated, accountable, and keep pushing till we get the best possible outcomes."</div>
+    </div>
+    <div class="fade-in" style="transition-delay:0.2s">
+      <div style="background:#FAF6F0;border:1px solid rgba(200,147,42,0.2);border-radius:8px;padding:40px;">
+        <div class="section-label" style="margin-bottom:24px;">Core Strengths</div>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="flex-shrink:0;width:36px;height:36px;background:rgba(200,147,42,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">⚡</div>
+            <div><strong>High-pressure Execution</strong><p style="font-size:14px;color:#8A7560;margin-top:4px;line-height:1.6;">Proven track record at Ather Energy & Formula Student Team under tight deadlines.</p></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="flex-shrink:0;width:36px;height:36px;background:rgba(200,147,42,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">🎯</div>
+            <div><strong>Product Management Focus</strong><p style="font-size:14px;color:#8A7560;margin-top:4px;line-height:1.6;">Deep domain knowledge to actively expand PM opportunities for the batch.</p></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="flex-shrink:0;width:36px;height:36px;background:rgba(200,147,42,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">🤝</div>
+            <div><strong>Ownership Mindset</strong><p style="font-size:14px;color:#8A7560;margin-top:4px;line-height:1.6;">I take full accountability — follow-ups, persistence, and never letting things slip.</p></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="flex-shrink:0;width:36px;height:36px;background:rgba(200,147,42,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">📢</div>
+            <div><strong>Professional Representation</strong><p style="font-size:14px;color:#8A7560;margin-top:4px;line-height:1.6;">Polished communication with recruiters to represent the batch at its best.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="achievements-bg fade-in">
+  <div class="section-label">02 · Background</div>
+  <h2 style="color:var(--cream)">Where I've been. What I've learned.</h2>
+  <p class="lead">Real-world exposure in demanding environments that shaped my work ethic and professional standards.</p>
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h3>Ather Energy</h3>
+      <p>Worked in a fast-paced EV startup environment where speed, ownership, and accountability were non-negotiable. Learned to thrive under tight deadlines and high expectations — exactly the Placecomm mindset.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏎️</div>
+      <h3>Formula Student Team</h3>
+      <p>Part of a high-performance engineering team during college. Coordinated across functions, managed multiple deliverables simultaneously, and developed a systems-level view of complex operations.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎓</div>
+      <h3>XLRI GM 2026–27</h3>
+      <p>Now bringing that same drive to the General Management programme — committed to channeling every ounce of hustle toward one mission: the best placements for our batch.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROMISES -->
+<section id="promises" style="background:#FFFDF9;">
+  <div class="section-label">03 · Commitments</div>
+  <h2>What I will do if elected.</h2>
+  <p class="lead">Three non-negotiable commitments I'm making to the batch — not as aspirations, but as deliverables.</p>
+  <div class="promises-grid fade-in">
+    <div class="promise-item">
+      <h4>Maximize Opportunities</h4>
+      <p>Relentlessly pursue and expand the number and quality of companies and roles coming to campus. No lead left unfollowed, no door left un-knocked.</p>
+    </div>
+    <div class="promise-item">
+      <h4>Clarity in Preparation</h4>
+      <p>Ensure every batchmate has targeted, actionable prep guidance — from timelines to company-specific insights — so nobody is left guessing.</p>
+    </div>
+    <div class="promise-item">
+      <h4>Professional Recruiter Relations</h4>
+      <p>Represent the batch with polish and professionalism in every recruiter interaction. Our reputation with companies begins with how we show up.</p>
+    </div>
+    <div class="promise-item">
+      <h4>PM Opportunity Focus</h4>
+      <p>Given my background, I'll specifically strengthen Product Management pipelines and ensure the batch is well-prepared for PM interviews and assessments.</p>
+    </div>
+    <div class="promise-item">
+      <h4>Accountability, Every Day</h4>
+      <p>Regular updates, transparent communication, and full ownership. No black boxes. The batch will always know what's happening and what's being done.</p>
+    </div>
+    <div class="promise-item">
+      <h4>Quiet Work, Loud Results</h4>
+      <p>I won't spend time making noise about effort — I'll spend it delivering. The results will speak. That's the only kind of hustle that matters.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY DIFFERENT -->
+<section id="different" style="background:var(--cream);">
+  <div class="section-label">04 · Why Unnati</div>
+  <div class="diff-grid">
+    <div class="fade-in">
+      <h2>Why I'm positioned differently.</h2>
+      <p class="lead" style="margin-bottom:0">Placecomm isn't just a logistics role — it requires ownership, hustle, and a genuine stake in outcomes.</p>
+    </div>
+    <ul class="diff-list fade-in" style="transition-delay:0.2s">
+      <li><div class="num">1</div><div class="content"><h4>Industry-first background</h4><p>Not just academics — real industry exposure at Ather and Formula Student means I understand what recruiters look for from the inside.</p></div></li>
+      <li><div class="num">2</div><div class="content"><h4>Product Management domain expertise</h4><p>I can actively open PM doors that others might not know how to knock on, and prep the batch for the specific demands of those roles.</p></div></li>
+      <li><div class="num">3</div><div class="content"><h4>Operational, not just relational</h4><p>Beyond building recruiter relationships, I bring an operational rigor — tracking, follow-ups, and execution — that keeps the process moving.</p></div></li>
+      <li><div class="num">4</div><div class="content"><h4>Proven under pressure</h4><p>When it counts most — crunch time, high stakes — I've shown up and delivered. That's not a claim, it's a track record.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- VOTE -->
+<section id="vote" class="vote-section fade-in">
+  <div class="section-label" style="justify-content:center; color:var(--gold)">05 · Your Vote</div>
+  <h2>Will you vote for Unnati?</h2>
+  <p class="lead">Your vote takes 2 seconds. Her commitment will last the entire placement season.</p>
+  <div class="vote-box">
+    <p class="vote-question">Do you support Unnati for Placecomm,<br/>XLRI GM 2026–27?</p>
+    <div class="vote-buttons" id="vote-btns">
+      <button class="vote-btn vote-yes" onclick="castVote('yes')">✓ Yes, I do!</button>
+      <button class="vote-btn vote-no" onclick="castVote('no')">No</button>
+    </div>
+    <div class="vote-result" id="vote-result">
+      <p id="vote-msg">Thank you for voting!</p>
+      <div class="vote-bars">
+        <div class="bar-row">
+          <span class="bar-label" style="color:var(--gold-light)">Yes</span>
+          <div class="bar-outer"><div class="bar-inner bar-yes-fill" id="bar-yes" style="width:0%"></div></div>
+          <span class="bar-count" id="count-yes" style="color:var(--gold-light)">0</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">No</span>
+          <div class="bar-outer"><div class="bar-inner bar-no-fill" id="bar-no" style="width:0%"></div></div>
+          <span class="bar-count" id="count-no">0</span>
+        </div>
+      </div>
+      <p class="already-voted" id="voted-note"></p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="name">Unnati</div>
+    <div class="sub">Candidate · Placecomm · XLRI GM 2026–27</div>
+  </div>
+  <div style="color:rgba(250,246,240,0.35);font-size:12px;text-align:right;">
+    Quietly putting in the work.<br/>Delivering results.
+  </div>
+</footer>
+
+<script>
+  // ========== STORAGE KEYS ==========
+  const STORAGE_KEY_VOTES = 'unnati_placecomm_votes';
+  const STORAGE_KEY_VISITS = 'unnati_placecomm_visits';
+  const VOTED_KEY = 'unnati_placecomm_voted';
+
+  // ========== VISIT COUNTER ==========
+  function getVisits() {
+    try { return parseInt(localStorage.getItem(STORAGE_KEY_VISITS) || '0'); } catch(e) { return 0; }
+  }
+  function setVisits(n) {
+    try { localStorage.setItem(STORAGE_KEY_VISITS, n.toString()); } catch(e) {}
+  }
+
+  // Increment visit on load
+  const visits = getVisits() + 1;
+  setVisits(visits);
+  document.getElementById('visit-text').textContent =
+    visits === 1 ? 'You are the first visitor!' :
+    `${visits.toLocaleString()} visit${visits > 1 ? 's' : ''} so far`;
+
+  // ========== VOTE LOGIC ==========
+  function getVotes() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_VOTES);
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    return { yes: 0, no: 0 };
+  }
+  function setVotes(v) {
+    try { localStorage.setItem(STORAGE_KEY_VOTES, JSON.stringify(v)); } catch(e) {}
+  }
+  function hasVoted() {
+    try { return !!localStorage.getItem(VOTED_KEY); } catch(e) { return false; }
+  }
+  function markVoted(choice) {
+    try { localStorage.setItem(VOTED_KEY, choice); } catch(e) {}
+  }
+
+  function showResults(msg, noteMsg) {
+    const v = getVotes();
+    const total = v.yes + v.no || 1;
+    document.getElementById('vote-msg').textContent = msg;
+    document.getElementById('count-yes').textContent = v.yes;
+    document.getElementById('count-no').textContent = v.no;
+    document.getElementById('voted-note').textContent = noteMsg || '';
+    document.getElementById('vote-btns').style.display = 'none';
+    const result = document.getElementById('vote-result');
+    result.classList.add('show');
+    setTimeout(() => {
+      document.getElementById('bar-yes').style.width = Math.round(v.yes/total*100) + '%';
+      document.getElementById('bar-no').style.width = Math.round(v.no/total*100) + '%';
+    }, 100);
+  }
+
+  function castVote(choice) {
+    if (hasVoted()) {
+      showResults('You\'ve already voted!', 'Each visitor can vote once. Thank you!');
+      return;
+    }
+    const v = getVotes();
+    if (choice === 'yes') v.yes++;
+    else v.no++;
+    setVotes(v);
+    markVoted(choice);
+    const msg = choice === 'yes' ? '🎉 Thank you for your support!' : 'Thank you for your honesty!';
+    showResults(msg, '');
+  }
+
+  // Auto-show results if already voted
+  if (hasVoted()) {
+    showResults('You\'ve already voted!', 'Each visitor can vote once.');
+  }
+
+  // ========== FADE IN OBSERVER ==========
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
