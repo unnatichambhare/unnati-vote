@@ -389,7 +389,7 @@
     <div class="hero-meta">
       <div class="hero-meta-item"><span class="label">Batch</span><span class="value">GM 2026–27</span></div>
       <div class="hero-meta-item"><span class="label">Role</span><span class="value">Placecomm</span></div>
-      <div class="hero-meta-item"><span class="label">Focus</span><span class="value">100% Transparency</span></div>
+      <div class="hero-meta-item"><span class="label">Focus</span><span class="value">Product Management</span></div>
     </div>
     <p style="font-size:13px;color:var(--muted);font-style:italic;margin-bottom:28px;line-height:1.7;max-width:400px;">Your vote takes 2 seconds. Her commitment will last the entire placement season.</p>
     <div class="hero-cta">
@@ -519,12 +519,12 @@
   <div class="section-label" style="justify-content:center; color:var(--gold)">05 · Your Vote</div>
   <h2>Will you vote for Unnati?</h2>
   <p class="lead">Your vote takes 2 seconds. Her commitment will last the entire placement season.</p>
+  <p class="lead" style="font-weight:700; color:#22c55e; margin-top:-24px;">Placement mein Unnati chahiye toh Unnati ko vote karo!!</p>
   <div class="vote-box">
     <p class="vote-question">Do you support Unnati for Placecomm,<br/>XLRI GM 2026–27?</p>
-    <p class="lead">Placement mein Unnati chahiye toh Unnati ko vote karo!!</p>
     <div class="vote-buttons" id="vote-btns">
-      <button class="vote-btn vote-yes" onclick="castVote('yes')">✓ Yes, I do!</button>
-      <button class="vote-btn vote-no" onclick="castVote('no')">No</button>
+      <button class="vote-btn vote-yes" id="btn-yes">✓ Yes, I do!</button>
+      <button class="vote-btn vote-no" id="btn-no">No</button>
     </div>
     <div class="vote-result" id="vote-result">
       <p id="vote-msg">Thank you for voting!</p>
@@ -556,34 +556,49 @@
   </div>
 </footer>
 
-<script>
-  const STORAGE_KEY_VOTES = 'unnati_placecomm_votes';
-  const STORAGE_KEY_VISITS = 'unnati_placecomm_visits';
-  const VOTED_KEY = 'unnati_placecomm_voted';
+<script type="module">
+  // ── Firebase config ──────────────────────────────────────────────────────────
+  // 1. Go to https://console.firebase.google.com
+  // 2. Create a project → Add web app → copy the firebaseConfig object below
+  // 3. In Firestore Database → Rules, set: allow read, write: if true;  (for now)
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+  // ─────────────────────────────────────────────────────────────────────────────
 
-  function getVisits() {
-    try { return parseInt(localStorage.getItem(STORAGE_KEY_VISITS) || '0'); } catch(e) { return 0; }
-  }
-  function setVisits(n) {
-    try { localStorage.setItem(STORAGE_KEY_VISITS, n.toString()); } catch(e) {}
-  }
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, onSnapshot }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  const visits = getVisits() + 1;
-  setVisits(visits);
-  document.getElementById('visit-text').textContent =
-    visits === 1 ? 'You are the first visitor!' :
-    `${visits.toLocaleString()} visit${visits > 1 ? 's' : ''} so far`;
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
 
-  function getVotes() {
+  const VOTED_KEY   = 'unnati_placecomm_voted';
+  const votesRef    = doc(db, 'unnati', 'votes');
+  const visitsRef   = doc(db, 'unnati', 'visits');
+
+  // ── Visit counter (real-time, shared across all users) ───────────────────────
+  async function incrementVisit() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY_VOTES);
-      if (raw) return JSON.parse(raw);
-    } catch(e) {}
-    return { yes: 0, no: 0 };
+      await setDoc(visitsRef, { count: increment(1) }, { merge: true });
+    } catch(e) { console.error('visit increment failed', e); }
   }
-  function setVotes(v) {
-    try { localStorage.setItem(STORAGE_KEY_VOTES, JSON.stringify(v)); } catch(e) {}
-  }
+
+  onSnapshot(visitsRef, snap => {
+    const count = snap.exists() ? (snap.data().count || 0) : 0;
+    document.getElementById('visit-text').textContent =
+      count === 1 ? 'You are the first visitor!' :
+      `${count.toLocaleString()} visit${count !== 1 ? 's' : ''} so far`;
+  });
+
+  incrementVisit();
+
+  // ── Vote helpers ──────────────────────────────────────────────────────────────
   function hasVoted() {
     try { return !!localStorage.getItem(VOTED_KEY); } catch(e) { return false; }
   }
@@ -591,44 +606,63 @@
     try { localStorage.setItem(VOTED_KEY, choice); } catch(e) {}
   }
 
-  function showResults(msg, noteMsg) {
-    const v = getVotes();
-    const total = v.yes + v.no || 1;
+  function renderResults(yes, no, msg, note) {
+    const total = yes + no || 1;
     document.getElementById('vote-msg').textContent = msg;
-    document.getElementById('count-yes').textContent = v.yes;
-    document.getElementById('count-no').textContent = v.no;
-    document.getElementById('voted-note').textContent = noteMsg || '';
+    document.getElementById('count-yes').textContent = yes;
+    document.getElementById('count-no').textContent = no;
+    document.getElementById('voted-note').textContent = note || '';
     document.getElementById('vote-btns').style.display = 'none';
-    const result = document.getElementById('vote-result');
-    result.classList.add('show');
+    document.getElementById('vote-result').classList.add('show');
     setTimeout(() => {
-      document.getElementById('bar-yes').style.width = Math.round(v.yes/total*100) + '%';
-      document.getElementById('bar-no').style.width = Math.round(v.no/total*100) + '%';
+      document.getElementById('bar-yes').style.width = Math.round(yes / total * 100) + '%';
+      document.getElementById('bar-no').style.width  = Math.round(no  / total * 100) + '%';
     }, 100);
   }
 
-  function castVote(choice) {
+  // Live-update bars whenever Firestore changes (works for everyone in real-time)
+  onSnapshot(votesRef, snap => {
+    if (!snap.exists()) return;
+    const { yes = 0, no = 0 } = snap.data();
+    if (document.getElementById('vote-result').classList.contains('show')) {
+      const total = yes + no || 1;
+      document.getElementById('count-yes').textContent = yes;
+      document.getElementById('count-no').textContent  = no;
+      document.getElementById('bar-yes').style.width = Math.round(yes / total * 100) + '%';
+      document.getElementById('bar-no').style.width  = Math.round(no  / total * 100) + '%';
+    }
+  });
+
+  async function castVote(choice) {
     if (hasVoted()) {
-      showResults('You\'ve already voted!', 'Each visitor can vote once. Thank you!');
+      const snap = await getDoc(votesRef);
+      const { yes = 0, no = 0 } = snap.exists() ? snap.data() : {};
+      renderResults(yes, no, "You've already voted!", 'Each visitor can vote once. Thank you!');
       return;
     }
-    const v = getVotes();
-    if (choice === 'yes') v.yes++;
-    else v.no++;
-    setVotes(v);
     markVoted(choice);
+    await setDoc(votesRef, { [choice]: increment(1) }, { merge: true });
+    const snap = await getDoc(votesRef);
+    const { yes = 0, no = 0 } = snap.exists() ? snap.data() : {};
     const msg = choice === 'yes' ? '🎉 Thank you for your support!' : 'Thank you for your honesty!';
-    showResults(msg, '');
+    renderResults(yes, no, msg, '');
   }
 
+  // Auto-show results if already voted
   if (hasVoted()) {
-    showResults('You\'ve already voted!', 'Each visitor can vote once.');
+    getDoc(votesRef).then(snap => {
+      const { yes = 0, no = 0 } = snap.exists() ? snap.data() : {};
+      renderResults(yes, no, "You've already voted!", 'Each visitor can vote once.');
+    });
   }
 
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+  document.getElementById('btn-yes').addEventListener('click', () => castVote('yes'));
+  document.getElementById('btn-no').addEventListener('click', () => castVote('no'));
 </script>
 </body>
 </html>
