@@ -281,11 +281,25 @@
     .card p { color: rgba(250,246,240,0.65); font-size: 14px; line-height: 1.7; }
 
     /* PROMISES */
-    .promises-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-    .promise-item { position: relative; padding-left: 28px; }
-    .promise-item::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
-    .promise-item h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--deep); }
-    .promise-item p { font-size: 14px; line-height: 1.7; color: var(--muted); }
+    .promise-item {
+      position: relative;
+      padding: 20px 20px 20px 44px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+    }
+    .promise-item::before {
+      content: '';
+      position: absolute;
+      left: 18px;
+      top: 24px;
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+    .promise-item h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--deep); }
+    .promise-item p { font-size: 13px; line-height: 1.6; color: var(--muted); }
 
     /* WHY DIFFERENT */
     .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
@@ -323,10 +337,7 @@
     .vote-yes:hover { background: var(--gold-light); transform: scale(1.05); box-shadow: 0 12px 32px rgba(200,147,42,0.4); }
     .vote-no { background: transparent; color: rgba(250,246,240,0.7); border-color: rgba(250,246,240,0.25); }
     .vote-no:hover { background: rgba(255,255,255,0.1); border-color: rgba(250,246,240,0.5); transform: scale(1.03); }
-    .vote-result {
-      margin-top: 36px;
-      display: none;
-    }
+    .vote-result { margin-top: 36px; display: none; }
     .vote-result.show { display: block; }
     .vote-result p { color: var(--gold-light); font-size: 17px; font-weight: 600; margin-bottom: 20px; }
     .vote-bars { display: flex; flex-direction: column; gap: 12px; }
@@ -361,7 +372,7 @@
       section { padding: 72px 32px; }
       .about-grid, .diff-grid { grid-template-columns: 1fr; gap: 40px; }
       .cards-grid { grid-template-columns: 1fr; }
-      .promises-grid { grid-template-columns: 1fr; }
+      .promises-grid { grid-template-columns: 1fr !important; }
       footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px; }
       #visit-banner { font-size: 12px; flex-wrap: wrap; gap: 8px; }
     }
@@ -467,7 +478,7 @@
   <div class="section-label">03 · Commitments</div>
   <h2>What I will do if elected.</h2>
   <p class="lead">Four non-negotiable commitments I'm making to the batch — not as aspirations, but as deliverables.</p>
-  <div class="promises-grid fade-in" style="display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; flex:1; gap:0;">
+  <div class="promises-grid fade-in" style="display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; flex:1; gap:16px;">
     <div class="promise-item">
       <h4>Maximize Opportunities</h4>
       <p>Relentlessly pursue and expand the number and quality of companies and roles coming to campus. No lead left unfollowed, no door left un-knocked.</p>
@@ -545,12 +556,10 @@
 </footer>
 
 <script>
-  // ========== STORAGE KEYS ==========
   const STORAGE_KEY_VOTES = 'unnati_placecomm_votes';
   const STORAGE_KEY_VISITS = 'unnati_placecomm_visits';
   const VOTED_KEY = 'unnati_placecomm_voted';
 
-  // ========== VISIT COUNTER ==========
   function getVisits() {
     try { return parseInt(localStorage.getItem(STORAGE_KEY_VISITS) || '0'); } catch(e) { return 0; }
   }
@@ -558,14 +567,12 @@
     try { localStorage.setItem(STORAGE_KEY_VISITS, n.toString()); } catch(e) {}
   }
 
-  // Increment visit on load
   const visits = getVisits() + 1;
   setVisits(visits);
   document.getElementById('visit-text').textContent =
     visits === 1 ? 'You are the first visitor!' :
     `${visits.toLocaleString()} visit${visits > 1 ? 's' : ''} so far`;
 
-  // ========== VOTE LOGIC ==========
   function getVotes() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY_VOTES);
@@ -613,12 +620,10 @@
     showResults(msg, '');
   }
 
-  // Auto-show results if already voted
   if (hasVoted()) {
     showResults('You\'ve already voted!', 'Each visitor can vote once.');
   }
 
-  // ========== FADE IN OBSERVER ==========
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
   }, { threshold: 0.1 });
