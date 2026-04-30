@@ -521,6 +521,7 @@
   <p class="lead">Your vote takes 2 seconds. Her commitment will last the entire placement season.</p>
   <div class="vote-box">
     <p class="vote-question">Do you support Unnati for Placecomm,<br/>XLRI GM 2026–27?</p>
+    <p class="lead">Placement mein Unnati chahiye toh Unnati ko vote karo!!</p>
     <div class="vote-buttons" id="vote-btns">
       <button class="vote-btn vote-yes" onclick="castVote('yes')">✓ Yes, I do!</button>
       <button class="vote-btn vote-no" onclick="castVote('no')">No</button>
@@ -621,8 +622,7 @@
   }
 
   if (hasVoted()) {
-    showResults('You\'ve already voted!', 'Each visitor can vote once.
-                Placement mein Unnati chahiye toh Unnati ko vote karo!!');
+    showResults('You\'ve already voted!', 'Each visitor can vote once.');
   }
 
   const io = new IntersectionObserver(entries => {
